@@ -3,3 +3,10 @@
 
 ![](https://i.imgur.com/ceLNwjO.png)
 
+## Instalacion
+
+```bash
+git clone https://github.com/Pirrandi/animu-cli
+cd animu-cli
+./animu-cli
+```
