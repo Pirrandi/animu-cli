@@ -1,0 +1,490 @@
+#!/bin/bash
+
+buscar_anime() {
+	query="$1"
+	# Reemplaza espacios con "+"
+	query=$(echo "$query" | tr ' ' '+')
+	search_url="https://monoschinos2.com/buscar?q=$query"
+
+	# Realiza la búsqueda y filtra los resultados la clase "seristitles"
+	anime_titles=$(curl -s "$search_url" | grep -o '<h3 class="seristitles">[^<]*' | sed 's/<h3 class="seristitles">//')
+	echo "$anime_titles"
+}
+
+while true; do
+	historial_file="/home/pirra/Documents/historial.txt"
+	clear
+	if [ ! -e "$historial_file" ]; then
+		touch "$historial_file"
+	fi
+
+	echo ' ⠀⠀⠀⠀⠀⠀⠀⠀⣀⣴⣶⣿⣿⣿⣿⣿⣿⣿⣶⣦⣀⠀⠀⠀⠀⠀⠀⠀'
+	echo ' ⠀⠀⠀⠀⠀⠀⣤⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣄⠀⠀⠀⠀⠀'
+	echo ' ⠀⠀⠀⠀⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀⠀⠀⢠'
+	echo ' ⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣟⣛⣻⣿⣿⣟⣿⣿⣿⣷⠀⠀⠀     _          _                    ____ _     ___ '
+	echo ' ⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣫⣽⣾⣻⣾⣿⣿⣿⣿⡿⣿⣿⠀⠀⠀    / \   _ __ (_)_ __ ___  _   _   / ___| |   |_ _|'
+	echo ' ⠀⠀⠀⢰⣿⣿⣻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠻⡿⠿⠟⠛⣟⣿⣽⠀⠀⠀   / _ \ |  _ \| |  _ ` _ \| | | | | |   | |    | | '
+	echo ' ⠀⠀⠀⠸⣿⣿⣿⣷⣿⣿⣿⣿⡿⠍⠈⠀⠁⣴⡆⠀⠀⠠⢭⣮⣿⡶⠀⠀  / ___ \| | | | | | | | | | |_| | | |___| |___ | | '
+	echo ' ⠀⡴⠲⣦⢽⣿⣿⣿⣿⣿⣟⣩⣨⣀⡄⣐⣾⣿⣿⣇⠠⣷⣶⣿⣿⡠⠁⠀ /_/   \_\_| |_|_|_| |_| |_|\__,_|  \____|_____|___|'
+	echo ' ⠀⠃⢀⡄⠀⢻⣿⣿⣿⣿⣽⢿⣿⣯⣾⣿⣿⣿⣿⣿⢿⣿⣿⡟⣿⠀⠀⠀'
+	echo ' ⠀⠀⠣⠧⠀⢿⣿⣿⣿⣿⣿⣿⣿⣿⠟⢸⣿⠿⠿⠿⣧⠙⣿⣿⡿⠀⠀⠀       Visualizador de Anime.'
+	echo ' ⠀⠀⠀⠁⠼⣒⡿⣿⣿⣿⣿⣿⣿⣿⣠⣬⠀⠀⠀⠀⣾⣷⡈⣿⡇⠀⠀⠀'
+	echo ' ⠀⠀⠀⠀⠀⠉⢳⣿⣿⣿⣿⣿⣿⣿⢟⠗⠼⠖⠒⠔⠉⠉⠻⣿⠇⠀⠀⠀'
+	echo ' ⠀⠀⠀⠀⠀⠀⠈⣻⡿⣿⣿⣿⣿⡿⡀⣤⡄⠸⣰⣾⡒⣷⣴⣿⠀⠀⠀⠀'
+	echo ' ⠀⠀⠀⠀⠀⠀⠂⢸⡗⡄⠘⠭⣭⣷⣿⣮⣠⣌⣫⣿⣷⣿⣿⠃⠀⠈⠀⠀'
+	echo ' ⠀⠀⠀⠀⠀⠈⠀⢸⣿⣾⣷⣦⡿⣿⣿⣿⡿⢻⠞⣹⣿⣿⠏⠀⠀⠀⠀⠀'
+	echo ' ⠀⠀⠀⠀⠀⢘⠀⠘⢻⡿⢿⣋⣤⣤⠌⠉⠛⠛⠀⠈⠉⠁⠀⠀⠀⠀⠀⡀'
+
+	# Función para agregar un registro al historial
+	agregar_al_historial() {
+		anime="$1"
+		episodio="$2"
+		echo "$anime|$episodio" >>"$historial_file"
+	}
+	mostrar_historial() {
+		echo -e "\e[35m    [!] Últimos capitulos vistos [!]\e[0m"
+		echo -e "\e[35m───────────────────────────────────────\e[0m"
+		echo -e "\e[35m\n\e[0m"
+		tail -n 5 "$historial_file" | while IFS='|' read -r anime episodio; do
+			echo " - $anime - Episodio $episodio"
+
+		done
+		echo -e "\e[35m\n\e[0m"
+		echo -e "\e[35m───────────────────────────────────────\e[0m"
+	}
+
+	if [ $historial_file != "" ]; then
+		echo -e "\n"
+		mostrar_historial
+		echo -e "\n"
+	fi
+
+	# Función para buscar un anime en MonosChinos
+
+	echo -e "[!] ¿Qué deseas hacer?"
+	echo ""
+	echo -e "\e[33m    1) Buscar un anime\e[0m"
+	echo -e "\e[33m    2) Mostrar historial\e[0m"
+	echo -e "\e[33m    3) Salir\e[0m"
+	echo ""
+	read -p "[?] Selecciona una opción: " opcion
+
+	case $opcion in
+	1)
+		clear
+
+		if [ $# -eq 0 ]; then
+			echo -e "\e[33m[!] Por favor, introduce el nombre del anime o parte de él.\e[0m"
+			echo ""
+			echo -e "\e[31m q) Volver al menu.\e[0m"
+			echo ""
+			read -p "[?] Nombre del anime: " anime_query
+
+		else
+			anime_query="$1"
+		fi
+		if [ "$anime_query" == "q" ]; then
+			continue
+		fi
+		# Busca el anime y muestra los resultados
+		anime_titles=$(buscar_anime "$anime_query")
+
+		# Si no se encontraron resultados, muestra un mensaje y sale
+		if [ -z "$anime_titles" ]; then
+			for ((i = 3; i >= 1; i--)); do
+				clear
+				echo -e "\e[31m[!] No se encontraron resultados para $anime_query.\e[0m"
+				echo "Volviendo al menu en..." $i
+				sleep 1
+
+			done
+			continue
+		fi
+
+		# Muestra los títulos numerados
+		clear
+		while true; do
+
+			echo "Se encontraron los siguientes animes para $anime_query:"
+			echo -e "\n"
+			IFS=$'\n' # Configura el separador para nuevas líneas
+			anime_titles_array=($anime_titles)
+			for i in "${!anime_titles_array[@]}"; do
+				echo -e "\e[33m    $((i + 1)). ${anime_titles_array[$i]}\e[0m"
+
+			done
+			echo ""
+			echo -e "\e[31m    q) Volver al menu.\e[0m"
+			# Pide al usuario que seleccione un título
+			echo -e "\n"
+			echo -e "\e[33m[!] Selecciona un anime por su número (1-${#anime_titles_array[@]})\e[0m"
+			echo ""
+			read -p "[?] Opcion: " anime_choice
+			echo -e "\n"
+
+			if [ "$anime_choice" == "q" ]; then
+				break
+			fi
+
+			# Verifica que la selección sea válida (dentro del rango de opciones)
+			if [[ "$anime_choice" =~ ^[0-9]+$ ]] && ((anime_choice >= 1 && anime_choice <= ${#anime_titles_array[@]})); then
+				# Obtén el título seleccionado
+				selected_title="${anime_titles_array[$((anime_choice - 1))]}"
+				# Elimina los dos puntos del título
+
+				selected_title=$(echo "$selected_title" | sed 's/[:,.()!]//g; s/[ -]\+/ /g')
+				clear
+				echo -e "\e[33m[!] Seleccionaste: $selected_title\e[0m"
+				echo -e "\n"
+				break
+			else
+				clear
+				echo -e "\e[31m[!] Selección inválida. Por favor, elige un número válido.[!]\e[0m"
+				echo -e "\n"
+
+			fi
+
+		done
+		if [ "$anime_choice" == "q" ]; then
+			continue
+		fi
+		# Obtiene el título seleccionado
+		selected_title="${anime_titles_array[$((anime_choice - 1))]}"
+		# Elimina los dos puntos del título
+		selected_title=$(echo "$selected_title" | sed 's/[:,.()!]//g; s/[ -]\+/ /g')
+		clear
+
+		# Formatea el nombre del anime reemplazando espacios con guiones
+		anime_name_formatted=$(echo "$selected_title" | tr ' ' '-')
+
+		# Obtener episodios del Anime
+
+		API_URL="https://api.jikan.moe/v4/anime?q=$anime_name_formatted"
+
+		# Realiza la solicitud GET a la API y almacena la respuesta en una variable
+		response=$(curl -s "$API_URL")
+
+		# Utiliza jq para extraer el valor de "episodes" del JSON de respuesta
+		episodes=$(echo "$response" | jq -r '.data[0].episodes')
+
+		# Utiliza jq para extraer el valor de "airing" del JSON de respuesta
+		airing=$(echo "$response" | jq -r '.data[0].airing')
+
+		score=$(echo "$response" | jq -r '.data[0].score')
+
+		clasificacion=$(echo "$response" | jq -r '.data[0].rating')
+
+		duration=$(echo "$response" | jq -r '.data[0].duration')
+
+		while true; do
+
+			# Verifica si se obtuvo el número de episodios correctamente
+			clear
+			while true; do
+
+				echo -e "\e[33m[!] Seleccionaste: $selected_title\e[0m"
+				echo -e "\n"
+				respuesta=1
+
+				if [ "$episodes" != "null" ]; then
+					echo "    - Episodios: $episodes"
+				else
+					echo "    No se pudo obtener la cantidad de episodios."
+				fi
+
+				if [ "$score" != "null" ]; then
+					echo "    - Puntuacion: $score"
+				else
+					echo "    No se pudo obtener la puntuacion."
+				fi
+
+				if [ "$clasificacion" != "null" ]; then
+					echo "    - Clasificacion: $clasificacion"
+				else
+					echo "    No se pudo obtener la clasificacion."
+				fi
+
+				if [ "$duration" != "null" ]; then
+					echo "    - Duracion: $duration"
+				else
+					echo "    No se pudo obtener la duracion."
+				fi
+
+				# Verifica el valor de "airing" y muestra el estado adecuado
+				if [ "$airing" == "true" ]; then
+					echo -e "\e[32m    - Estado: En emisión\e[0m"
+					echo -e "\n"
+				else
+					echo -e "\e[31m    - Estado: Finalizada\e[0m"
+					echo -e "\n"
+				fi
+
+				# Pregunta al usuario el número del episodio que desea ver
+
+				read -p "[?] Ver episodio: " episode_number
+				if [ "$episode_number" == "q" ]; then
+					break
+				fi
+				# Verificar si la respuesta es un número válido y no excede el número de episodios
+				if [[ "$episode_number" =~ ^[0-9]+$ ]]; then
+					if ((episode_number >= 1 && episode_number <= episodes)); then
+						break # Salir del bucle si la respuesta es válida
+					else
+						clear
+						echo -e "\e[31m[!] Número de episodio fuera de rango. Debe estar entre 1 y $episodes. [!]\e[0m"
+						echo ""
+					fi
+				else
+					clear
+					echo -e "\e[31m[!] Respuesta inválida. Introduce un número válido. [!]\e[0m"
+					echo ""
+				fi
+			done
+			if [ "$episode_number" == "q" ]; then
+				break
+			fi
+			# En este punto, episode_number contiene el número de episodio válido que el usuario desea ver
+
+			# Crea la URL del episodio seleccionado del anime
+			while [ "$respuesta" != 2 ]; do
+				clear
+				echo "Has seleccionado el episodio $episode_number."
+				url="https://monoschinos2.com/ver/$anime_name_formatted-episodio-$episode_number"
+				echo ""
+				agregar_al_historial "$selected_title" "$episode_number"
+				# Intenta reproducir el episodio desde mp4upload
+				echo "Conectando al servidor..."
+				data_player=$(curl -s "$url" | sed -nE "s@.*data-player=\"([^\"]*)\">mp4upload.*@\1@p" | head -1)
+				embed_link=$(printf "%s" "$data_player" | base64 -d)
+
+				video_link=$(curl -s "$embed_link" | sed -nE "s@.*src: \"([^\"]*)\".*@\1@p")
+
+				if [ "$video_link" = "" ]; then
+					echo "\e[31mEl servidor fallo.\e[0m"
+					echo "Probando otro servidor..."
+					data_player=$(curl -s "$url" | sed -nE "s@.*data-player=\"([^\"]*)\">uqload*@\1@p" | head -1)
+					embed_link=$(printf "%s" "$data_player" | base64 -d)
+					embed_link=$(echo "$embed_link" | sed 's/\(.com\|.co\)/.io/')
+					video_link=$(curl -s "$embed_link" | sed -n 's/.*sources: \["\([^"]*\.mp4\)".*/\1/p')
+
+					mpv "$video_link" --referrer="https://www.uqload.com/"
+				fi
+
+				echo "Reproduciendo $anime_name_formatted - Episodio $episode_number"
+
+				mpv "$video_link" --referrer="https://www.mp4upload.com/"
+
+				if [ "$data_player" = "" ]; then
+					clear
+					echo -e "\e[31mEpisodio no encontrado\e[0m"
+					echo -e "\e[33mLa lista de episodio que se proporciona es para las versiones en Japones (Subtitulada).\n Las versiones dobladas suelen estar limitadas en cuanto a episodios, revisa la disponibilidad.\e[0m"
+					echo "URL erroneo: $url"
+				fi
+
+				clear
+
+				while true; do
+					clear
+					echo "¿Quieres continuar con el siguiente episodio?"
+					echo ""
+					echo "   1) Si"
+					echo "   2) No"
+					echo ""
+					echo -e "\e[31mq) Volver al menu.\e[0m"
+					echo ""
+					read -p "Opcion: " respuesta
+
+					if [ "$respuesta" == "q" ]; then
+						break
+					fi
+					if [ "$respuesta" == 1 ]; then
+						((episode_number++))
+						break
+					elif [ "$respuesta" == 2 ]; then
+						echo "Saliendo..."
+						break
+					else
+						echo "Respuesta no válida. Por favor, responde 'Sí' o 'No'."
+
+					fi
+				done
+				if [ "$respuesta" == "q" ]; then
+					break
+				fi
+			done
+			if [ "$respuesta" == "q" ]; then
+				break
+			fi
+		done
+
+		if [ "$episode_number" || "$respuesta" == "q" ]; then
+			continue
+		fi
+
+		if [ "$video_link" = "" ]; then
+			clear
+			while true; do
+				echo "No se ha encontrado el capítulo en este servidor. ¿Quieres probar en el servidor de TioAnime?: "
+				echo ""
+				echo "1) Sí "
+				echo "2) No"
+				echo ""
+				read -p "Opcion: " choice
+				case "$choice" in
+				1)
+					clear
+					echo "Iniciando TioAnime..."
+					echo ' '
+					echo '$$$$$$$$\ $$\                  $$$$$$\            $$\                         '
+					echo '\__$$  __|\__|                $$  __$$\           \__|                        '
+					echo '  $$ |   $$\  $$$$$$\        $$ /  $$ |$$$$$$$\  $$\ $$$$$$\$$$$\   $$$$$$\  '
+					echo '  $$ |   $$ |$$  __$$\       $$$$$$$$ |$$  __$$\ $$ |$$  _$$  _$$\ $$  __$$\ '
+					echo '  $$ |   $$ |$$ /  $$ |      $$  __$$ |$$ |  $$ |$$ |$$ / $$ / $$ |$$$$$$$$ |'
+					echo '  $$ |   $$ |$$ |  $$ |      $$ |  $$ |$$ |  $$ |$$ |$$ | $$ | $$ |$$   ____|'
+					echo '  $$ |   $$ |\$$$$$$  |      $$ |  $$ |$$ |  $$ |$$ |$$ | $$ | $$ |\$$$$$$$\ '
+					echo '  \__|   \__| \______/       \__|  \__|\__|  \__|\__|\__| \__| \__| \_______|'
+					echo '         '
+					echo '    Distribucion no Oficial    '
+					echo ' '
+
+					buscar() {
+						query="$1"
+						query=$(echo "$query" | tr ' ' '+')
+						search_url="https://tioanime.com/directorio?q=$query"
+						anime_titles=$(curl -s "$search_url" | grep -o '<h3 class="title">[^<]*' | sed 's/<h3 class="title">//')
+						echo "$anime_titles"
+					}
+
+					if [ $# -eq 0 ]; then
+						echo -e "\e[33m[!] Por favor, introduce el nombre del anime o parte de él:\e[0m"
+						echo ""
+						read -p "[?] Opcion: " anime_choice
+						echo -e "\n"
+					else
+						anime_query="$1"
+					fi
+
+					anime_titles=$(buscar "$anime_query")
+
+					if [ -z "$anime_titles" ]; then
+						echo "[!] No se encontraron resultados para '$anime_query'."
+						exit 1
+					fi
+
+					echo "Se encontraron los siguientes animes:"
+					echo -e "\n"
+					IFS=$'\n'
+					anime_titles_array=($anime_titles)
+					for i in "${!anime_titles_array[@]}"; do
+						echo -e "\e[33m    $((i + 1)). ${anime_titles_array[$i]}\e[0m"
+					done
+
+					echo -e "\n"
+					read -p "[?] Selecciona un anime por su número (1-${#anime_titles_array[@]}): " anime_choice
+					echo -e "\n"
+					# Verifica que la selección sea válida
+					if ! [[ "$anime_choice" =~ ^[0-9]+$ ]]; then
+						echo "[!] Selección inválida."
+						echo -e "\n"
+						exit 1
+					fi
+
+					# Obtiene el título seleccionado
+					selected_title="${anime_titles_array[$((anime_choice - 1))]}"
+					# Limpia el titulo para la URL
+					selected_title=$(echo "$selected_title" | sed 's/[:,.()!]//g; s/[ -]\+/ /g')
+					clear
+					echo -e "\e[33mSeleccionaste: $selected_title\e[0m"
+					echo -e "\n"
+					# Formatea el nombre del anime reemplazando espacios con guiones
+					anime_name_formatted=$(echo "$selected_title" | tr ' ' '-')
+					# Busca el titulo en la API de Jikan
+					API_URL="https://api.jikan.moe/v4/anime?q=$anime_name_formatted"
+					response=$(curl -s "$API_URL")
+					episodes=$(echo "$response" | jq -r '.data[0].episodes')
+					airing=$(echo "$response" | jq -r '.data[0].airing')
+
+					score=$(echo "$response" | jq -r '.data[0].score')
+
+					clasificacion=$(echo "$response" | jq -r '.data[0].rating')
+
+					duration=$(echo "$response" | jq -r '.data[0].duration')
+
+					# Verifica si se obtuvo el número de episodios correctamente
+					if [ "$episodes" != "null" ]; then
+						echo "    - Episodios: $episodes"
+					else
+						echo "    No se pudo obtener la información de episodios."
+					fi
+
+					if [ "$score" != "null" ]; then
+						echo "    - Puntuacion: $score"
+					else
+						echo "    No se pudo obtener la información de episodios."
+					fi
+
+					if [ "$clasificacion" != "null" ]; then
+						echo "    - Clasificacion: $clasificacion"
+					else
+						echo "    No se pudo obtener la información de episodios."
+					fi
+
+					if [ "$duration" != "null" ]; then
+						echo "    - Duracion: $duration"
+					else
+						echo "    No se pudo obtener la información de episodios."
+					fi
+
+					# Verifica el valor de "airing" y muestra el estado adecuado
+					if [ "$airing" == "true" ]; then
+						echo -e "\e[32m    - Estado: En emisión\e[0m"
+						echo -e "\n"
+					else
+						echo -e "\e[31m    - Estado: Finalizada\e[0m"
+						echo -e "\n"
+					fi
+
+					read -p "[?] Ver episodio: " episode_number
+
+					url="https://tioanime.com/ver/$anime_name_formatted-$episode_number"
+					echo $url
+					page_content=$(curl -s "$url")
+					# Buscar el enlace de YourUpload en la variable "videos"
+					yourupload_link=$(echo "$page_content" | grep -o 'YourUpload","[^"]*' | sed 's/.*"//' | sed 's/\\//g')
+					if [ -z "$yourupload_link" ]; then
+						echo "No se encontró el enlace de YourUpload."
+						exit 1
+					fi
+					# Imprimir el enlace de YourUpload
+					echo "Enlace de YourUpload: $yourupload_link"
+					# Acceder a la página de YourUpload
+					yourupload_page_content=$(curl -s "$yourupload_link")
+					# Buscar la URL del video .mp4 en la página de YourUpload
+					mp4_link=$(echo "$yourupload_page_content" | grep -o 'content="https://[^"]*\.mp4"' | sed 's/content="//')
+					if [ -z "$mp4_link" ]; then
+						echo "No se encontró el enlace del video .mp4 en YourUpload."
+						exit 1
+					fi
+					echo "Enlace del video .mp4: $mp4_link"
+					mpv $mp4_link --referrer="https://yourupload.com"
+					;;
+				2)
+					# Si elige No, muestra un mensaje y continúa con el script
+					echo "No se ha seleccionado TioAnime. Continuando..."
+					break
+					;;
+				*)
+					echo "Opción no válida. Por favor, elige 1 (Sí) o 2 (No)."
+					;;
+				esac
+			done
+		fi
+
+		;;
+	2)
+		echo "hola mundo"
+		cat $historial_file
+		sleep 10
+		;;
+	esac
+done
