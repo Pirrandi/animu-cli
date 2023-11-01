@@ -3,6 +3,10 @@
 
 ![](https://i.imgur.com/PKleYQn.png)
 
+## Intro
+
+Queda mucho por pulir y agregar, lo ire actualizando de a poco. De momento es completamente funcional.
+
 ## Instalacion
 
 ```bash
