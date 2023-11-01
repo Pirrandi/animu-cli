@@ -10,3 +10,12 @@ git clone https://github.com/Pirrandi/animu-cli
 cd animu-cli
 ./animu-cli
 ```
+
+
+## Si quieres ejecutarlo desde cualquier lado del sistema ejecuta este
+
+```bash
+git clone https://github.com/Pirrandi/animu-cli
+cd animu-cli
+sudo cp animu-cli /usr/local/bin/animu-cli
+```
