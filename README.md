@@ -8,7 +8,7 @@
 Queda mucho por pulir y agregar, lo ire actualizando de a poco.
 
 ## Instalacion
-
+### NO utilizar como Root, esto a veces produce problemas de audio con MPV.
 ```bash
 git clone https://github.com/Pirrandi/animu-cli
 cd animu-cli
