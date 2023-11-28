@@ -16,7 +16,7 @@ cd animu-cli
 ```
 
 
-## Si quieres ejecutarlo desde cualquier lado del sistema, utiliza este
+## Si quieres ejecutarlo desde cualquier lado del sistema, utiliza estos comandos:
 
 ```bash
 git clone https://github.com/Pirrandi/animu-cli
