@@ -3,7 +3,7 @@
 
 ![](https://i.imgur.com/PKleYQn.png)
 
-## Intro
+## Introducción
 
 Queda mucho por pulir y agregar, lo ire actualizando de a poco. De momento es completamente funcional.
 
