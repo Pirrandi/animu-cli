@@ -3,11 +3,11 @@
 
 ![](https://i.imgur.com/PKleYQn.png)
 
-## Introducción
+## Introducción.
 
 Queda mucho por pulir y agregar, lo ire actualizando de a poco.
 
-## Instalacion
+## Instalacion.
 
 ```bash
 git clone https://github.com/Pirrandi/animu-cli
@@ -16,7 +16,7 @@ cd animu-cli
 ```
 
 
-## Si quieres ejecutarlo desde cualquier lado del sistema, utiliza estos comandos
+## Si quieres ejecutarlo desde cualquier lado del sistema, utiliza estos comandos.
 
 ```bash
 git clone https://github.com/Pirrandi/animu-cli
