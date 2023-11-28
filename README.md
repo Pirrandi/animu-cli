@@ -7,7 +7,7 @@
 
 Queda mucho por pulir y agregar, lo ire actualizando de a poco.
 
-## Instalacion.
+## Instalacion
 
 ```bash
 git clone https://github.com/Pirrandi/animu-cli
