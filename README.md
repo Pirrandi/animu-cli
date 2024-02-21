@@ -5,6 +5,7 @@
 
 ## Introducción
 
+Visualizador de Anime en Español.
 Queda mucho por pulir y agregar, lo ire actualizando de a poco.
 
 ## Instalacion
