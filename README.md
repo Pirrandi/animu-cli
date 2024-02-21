@@ -12,9 +12,10 @@ Queda mucho por pulir y agregar, lo ire actualizando de a poco.
 ```bash
 git clone https://github.com/Pirrandi/animu-cli
 cd animu-cli
+chmod +x animu-cli
 ./animu-cli
 ```
-
+### Requiere MPV como visualizador de video.
 
 ## Si quieres ejecutarlo desde cualquier lado del sistema, utiliza estos comandos.
 
