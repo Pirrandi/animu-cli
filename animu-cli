@@ -12,43 +12,49 @@ buscar_anime() {
 }
 
 while true; do
-	historial_file="/home/pirra/Documents/historial.txt"
+	linux_user=$(whoami)
+	historial_file="/home/$linux_user/historial.txt"
 	clear
 	if [ ! -e "$historial_file" ]; then
 		touch "$historial_file"
 	fi
 
-	echo ' ⠀⠀⠀⠀⠀⠀⠀⠀⣀⣴⣶⣿⣿⣿⣿⣿⣿⣿⣶⣦⣀⠀⠀⠀⠀⠀⠀⠀'
-	echo ' ⠀⠀⠀⠀⠀⠀⣤⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣄⠀⠀⠀⠀⠀'
-	echo ' ⠀⠀⠀⠀⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀⠀⠀⢠'
-	echo ' ⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣟⣛⣻⣿⣿⣟⣿⣿⣿⣷⠀⠀⠀     _          _                    ____ _     ___ '
-	echo ' ⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣫⣽⣾⣻⣾⣿⣿⣿⣿⡿⣿⣿⠀⠀⠀    / \   _ __ (_)_ __ ___  _   _   / ___| |   |_ _|'
-	echo ' ⠀⠀⠀⢰⣿⣿⣻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠻⡿⠿⠟⠛⣟⣿⣽⠀⠀⠀   / _ \ |  _ \| |  _ ` _ \| | | | | |   | |    | | '
-	echo ' ⠀⠀⠀⠸⣿⣿⣿⣷⣿⣿⣿⣿⡿⠍⠈⠀⠁⣴⡆⠀⠀⠠⢭⣮⣿⡶⠀⠀  / ___ \| | | | | | | | | | |_| | | |___| |___ | | '
-	echo ' ⠀⡴⠲⣦⢽⣿⣿⣿⣿⣿⣟⣩⣨⣀⡄⣐⣾⣿⣿⣇⠠⣷⣶⣿⣿⡠⠁⠀ /_/   \_\_| |_|_|_| |_| |_|\__,_|  \____|_____|___|'
-	echo ' ⠀⠃⢀⡄⠀⢻⣿⣿⣿⣿⣽⢿⣿⣯⣾⣿⣿⣿⣿⣿⢿⣿⣿⡟⣿⠀⠀⠀'
-	echo ' ⠀⠀⠣⠧⠀⢿⣿⣿⣿⣿⣿⣿⣿⣿⠟⢸⣿⠿⠿⠿⣧⠙⣿⣿⡿⠀⠀⠀       Visualizador de Anime.'
-	echo ' ⠀⠀⠀⠁⠼⣒⡿⣿⣿⣿⣿⣿⣿⣿⣠⣬⠀⠀⠀⠀⣾⣷⡈⣿⡇⠀⠀⠀'
-	echo ' ⠀⠀⠀⠀⠀⠉⢳⣿⣿⣿⣿⣿⣿⣿⢟⠗⠼⠖⠒⠔⠉⠉⠻⣿⠇⠀⠀⠀'
-	echo ' ⠀⠀⠀⠀⠀⠀⠈⣻⡿⣿⣿⣿⣿⡿⡀⣤⡄⠸⣰⣾⡒⣷⣴⣿⠀⠀⠀⠀'
-	echo ' ⠀⠀⠀⠀⠀⠀⠂⢸⡗⡄⠘⠭⣭⣷⣿⣮⣠⣌⣫⣿⣷⣿⣿⠃⠀⠈⠀⠀'
-	echo ' ⠀⠀⠀⠀⠀⠈⠀⢸⣿⣾⣷⣦⡿⣿⣿⣿⡿⢻⠞⣹⣿⣿⠏⠀⠀⠀⠀⠀'
-	echo ' ⠀⠀⠀⠀⠀⢘⠀⠘⢻⡿⢿⣋⣤⣤⠌⠉⠛⠛⠀⠈⠉⠁⠀⠀⠀⠀⠀⡀'
+	echo '⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⡀⡀⣀⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀'
+	echo '⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⣶⣾⣾⣿⣿⣿⣿⣿⣿⣿⣿⣆⣄⠀⠀⠀⠀⠀⠀⠀'
+	echo '⠀⠀⠀⠀⠀⠀⠀⢰⣿⢻⡿⡏⡟⣿⣱⣿⣧⣿⣯⣽⠻⣿⣿⣷⣦⠄⠀⠀⠀⠀'
+	echo '⠀⠀⠀⠀⠀⠀⠀⣸⣿⣷⣷⣿⢿⠿⡏⠻⡀⢻⠙⣿⣿⣧⣽⣿⣿⣿⣄⠀⠀⠀'
+	echo '⢽⡽⠒⠄⠀⠀⠘⡼⡟⠇⡇⢋⠈⢆⡽⠶⠾⢾⠆⠘⢿⣿⡻⣿⣿⣿⣿⣂⠀⠀    _          _                    ____ _     ___ '
+	echo '⡙⢷⣦⣰⠀⠀⠀⢱⡥⠵⠈⠲⢯⣵⣶⣶⡒⠎⠀⠀⢸⣿⣿⣿⣿⣿⣿⡇⠀⠀   / \   _ __ (_)_ __ ___  _   _   / ___| |   |_ _|'
+	echo '⢶⣱⠛⢛⡄⠀⠀⠀⢟⡟⠁⠀⠀⠀⠀⣰⣶⣖⡆⠀⠸⡟⣵⡿⣿⣿⣿⠁⠀⠀  / _ \ |  _ \| |  _ ` _ \| | | | | |   | |    | | '
+	echo '⢀⢳⢈⠠⣴⡀⠀⠀⠈⢿⠷⠂⠀⠀⠀⠹⣿⡟⠒⠀⠀⢐⡗⠚⣹⣿⠏⠀⠀⠀ / ___ \| | | | | | | | | | |_| | | |___| |___ | | '
+	echo '⢸⠜⣷⠁⠄⠳⡀⠀⡇⣯⠭⣐⠠⠀⠀⠀⠹⡧⠀⠀⠀⡴⡤⢺⣿⠏⠀⠀⠀⠀/_/   \_\_| |_|_|_| |_| |_|\__,_|  \____|_____|___|'
+	echo '⡎⢰⠀⢗⡝⠁⠱⡀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⡜⠀⡇⠈⡏⠀⠀⠀⠀⠀'
+	echo '⢁⢸⠀⠀⢿⡍⠀⠑⣡⣤⣴⣤⣤⣤⣤⣴⣶⡾⠛⢡⠃⠠⡇⠀⡇⠀⠀⠀⠀⠀      Visualizador de Anime.'
+	echo '⠘⣌⠀⠀⠈⢿⣏⠠⠵⡄⠉⢻⡿⢿⣿⠟⠉⠀⢀⡟⠀⠀⠇⠀⢡⠀⠀⠀⠀⠀ https://github.com/Pirrandi/animu-cli'
+	echo '⠀⠘⠀⠀⠀⠘⡵⡆⠄⠚⢄⠈⡟⠉⠀⠀⠀⠀⣨⠇⠀⠀⢸⣀⡨⠔⠂⠈⠁⠒'
+	echo '⠀⠀⠀⠀⠀⠀⠸⣳⡄⣂⠭⢦⣽⡄⠀⠀⠀⠀⡟⢀⠤⢒⣉⣠⣴⣶⣿⣷⣴⡿'
+	echo '⠀⠀⠀⠀⡠⣴⣶⣟⣥⣀⣉⣛⣿⣔⣀⣀⡠⠔⣩⣴⣾⣷⣿⣿⣿⡿⠟⢋⣁⣤'
 
 	# Función para agregar un registro al historial
 	agregar_al_historial() {
 		anime="$1"
 		episodio="$2"
-		echo "$anime|$episodio" >>"$historial_file"
+		echo "$anime - Episodio $episodio" >>"$historial_file"
 	}
 	mostrar_historial() {
 		echo -e "\e[35m    [!] Últimos capitulos vistos [!]\e[0m"
 		echo -e "\e[35m───────────────────────────────────────\e[0m"
 		echo -e "\e[35m\n\e[0m"
-		tail -n 5 "$historial_file" | while IFS='|' read -r anime episodio; do
-			echo " - $anime - Episodio $episodio"
+		
+		if [ "$(cat $historial_file)" != "" ];then
 
-		done
+				echo "$(tail -n 5 $historial_file)"
+
+		else
+			echo "Aun no hay ningun capitulo registrado."
+		fi
+
+		
 		echo -e "\e[35m\n\e[0m"
 		echo -e "\e[35m───────────────────────────────────────\e[0m"
 	}
@@ -59,7 +65,7 @@ while true; do
 		echo -e "\n"
 	fi
 
-	# Función para buscar un anime en MonosChinos
+	# Buscar un anime en MonosChinos
 
 	echo -e "[!] ¿Qué deseas hacer?"
 	echo ""
@@ -158,7 +164,6 @@ while true; do
 		anime_name_formatted=$(echo "$selected_title" | tr ' ' '-')
 
 		# Obtener episodios del Anime
-
 		API_URL="https://api.jikan.moe/v4/anime?q=$anime_name_formatted"
 
 		# Realiza la solicitud GET a la API y almacena la respuesta en una variable
@@ -187,7 +192,7 @@ while true; do
 				respuesta=1
 
 				if [ "$episodes" != "null" ]; then
-					echo "    - Episodios: $episodes"
+					echo "    - Episodios: $episodes (El numero de episodios en algunas ocasiones puede estar incorrecto.)"
 				else
 					echo "    No se pudo obtener la cantidad de episodios."
 				fi
@@ -260,7 +265,7 @@ while true; do
 				video_link=$(curl -s "$embed_link" | sed -nE "s@.*src: \"([^\"]*)\".*@\1@p")
 
 				if [ "$video_link" = "" ]; then
-					echo "\e[31mEl servidor fallo.\e[0m"
+					echo -e "\e[31mEl servidor fallo.\e[0m"
 					echo "Probando otro servidor..."
 					data_player=$(curl -s "$url" | sed -nE "s@.*data-player=\"([^\"]*)\">uqload*@\1@p" | head -1)
 					embed_link=$(printf "%s" "$data_player" | base64 -d)
@@ -285,16 +290,17 @@ while true; do
 
 				while true; do
 					clear
-					echo "¿Quieres continuar con el siguiente episodio?"
+					echo "[!] ¿Quieres continuar con el siguiente episodio?"
 					echo ""
 					echo "   1) Si"
 					echo "   2) No"
 					echo ""
-					echo -e "\e[31mq) Volver al menu.\e[0m"
+					echo -e "\e[31mq) Volver al menu. \e[0m"
+					echo -e "\e[31ms) Probar servidor de Tio Anime. \e[0m"
 					echo ""
-					read -p "Opcion: " respuesta
+					read -p "[?] Opcion: " respuesta
 
-					if [ "$respuesta" == "q" ]; then
+					if [ "$respuesta" == "q" ] || [ "$respuesta" = "s" ]; then
 						break
 					fi
 					if [ "$respuesta" == 1 ]; then
@@ -308,28 +314,28 @@ while true; do
 
 					fi
 				done
-				if [ "$respuesta" == "q" ]; then
+				if [ "$respuesta" == "q" ] || [ "$respuesta" = "s" ]; then
 					break
 				fi
 			done
-			if [ "$respuesta" == "q" ]; then
+			if [ "$respuesta" == "q" ] || [ "$respuesta" = "s" ]; then
 				break
 			fi
 		done
 
-		if [ "$episode_number" || "$respuesta" == "q" ]; then
+		if [ "$episode_number" = "" ] || [ "$respuesta" = "q" ]; then
 			continue
 		fi
 
-		if [ "$video_link" = "" ]; then
+		if [ "$video_link" = "" ] || [ "$respuesta" = "s" ]; then
 			clear
 			while true; do
-				echo "No se ha encontrado el capítulo en este servidor. ¿Quieres probar en el servidor de TioAnime?: "
+				echo "[!] ¿Quieres probar en el servidor de TioAnime?: "
 				echo ""
-				echo "1) Sí "
-				echo "2) No"
+				echo "	1) Sí "
+				echo "	2) No"
 				echo ""
-				read -p "Opcion: " choice
+				read -p "[?] Opcion: " choice
 				case "$choice" in
 				1)
 					clear
@@ -370,7 +376,7 @@ while true; do
 						echo "[!] No se encontraron resultados para '$anime_query'."
 						exit 1
 					fi
-
+					clear
 					echo "Se encontraron los siguientes animes:"
 					echo -e "\n"
 					IFS=$'\n'
@@ -445,32 +451,70 @@ while true; do
 					fi
 
 					read -p "[?] Ver episodio: " episode_number
+					if [ "$episode_number" == "q" ]; then
+						break
+					fi
+					respuesta=1
+						while [ "$respuesta" != 2 ]; do
+						url="https://tioanime.com/ver/$anime_name_formatted-$episode_number"
+						
+						page_content=$(curl -s "$url")
+						# Buscar el enlace de YourUpload en la variable "videos"
+						yourupload_link=$(echo "$page_content" | grep -o 'YourUpload","[^"]*' | sed 's/.*"//' | sed 's/\\//g')
+						if [ -z "$yourupload_link" ]; then
+							echo "No se encontró el enlace de YourUpload."
+							exit 1
+						fi
+						# Imprimir el enlace de YourUpload
+						#echo "Enlace de YourUpload: $yourupload_link"
+						# Acceder a la página de YourUpload
+						yourupload_page_content=$(curl -s "$yourupload_link")
+						# Buscar la URL del video .mp4 en la página de YourUpload
+						mp4_link=$(echo "$yourupload_page_content" | grep -o 'content="https://[^"]*\.mp4"' | sed 's/content="//')
+						if [ -z "$mp4_link" ]; then
+							echo "No se encontró el enlace del video .mp4 en YourUpload."
+							exit 1
+						fi
+						#echo "Enlace del video .mp4: $mp4_link"
+						clear
+						echo "Reproduciendo $anime_name_formatted - Episodio $episode_number"
+						mpv $mp4_link --referrer="https://yourupload.com"
+						
+						while true; do
+							clear
+							echo "¿Quieres continuar con el siguiente episodio?"
+							echo ""
+							echo "   1) Si"
+							echo "   2) No"
+							echo ""
+							echo -e "\e[31mq) Volver al menu.\e[0m"
+							echo ""
+							read -p "Opcion: " respuesta
 
-					url="https://tioanime.com/ver/$anime_name_formatted-$episode_number"
-					echo $url
-					page_content=$(curl -s "$url")
-					# Buscar el enlace de YourUpload en la variable "videos"
-					yourupload_link=$(echo "$page_content" | grep -o 'YourUpload","[^"]*' | sed 's/.*"//' | sed 's/\\//g')
-					if [ -z "$yourupload_link" ]; then
-						echo "No se encontró el enlace de YourUpload."
-						exit 1
-					fi
-					# Imprimir el enlace de YourUpload
-					echo "Enlace de YourUpload: $yourupload_link"
-					# Acceder a la página de YourUpload
-					yourupload_page_content=$(curl -s "$yourupload_link")
-					# Buscar la URL del video .mp4 en la página de YourUpload
-					mp4_link=$(echo "$yourupload_page_content" | grep -o 'content="https://[^"]*\.mp4"' | sed 's/content="//')
-					if [ -z "$mp4_link" ]; then
-						echo "No se encontró el enlace del video .mp4 en YourUpload."
-						exit 1
-					fi
-					echo "Enlace del video .mp4: $mp4_link"
-					mpv $mp4_link --referrer="https://yourupload.com"
+							if [ "$respuesta" == "q" ]; then
+								break
+							fi
+							if [ "$respuesta" == 1 ]; then
+								((episode_number++))
+								break
+							elif [ "$respuesta" == 2 ]; then
+								echo "Saliendo..."
+								break
+							else
+								echo "Respuesta no válida. Por favor, responde 'Sí' o 'No'."
+
+							fi
+						done
+						if [ "$respuesta" == "q" ]; then
+							break
+						fi
+					done
+					break
 					;;
 				2)
 					# Si elige No, muestra un mensaje y continúa con el script
 					echo "No se ha seleccionado TioAnime. Continuando..."
+					sleep 2
 					break
 					;;
 				*)
@@ -482,9 +526,46 @@ while true; do
 
 		;;
 	2)
-		echo "hola mundo"
+		clear
+		echo -e "\e[35m    [!] Historial [!]\e[0m"
+		echo -e "\e[35m───────────────────────────────────────\e[0m"
+		echo ""
 		cat $historial_file
-		sleep 10
+		echo ""
+		echo -e "\e[35m───────────────────────────────────────\e[0m"
+		echo ""
+		echo -e "[!] ¿Qué deseas hacer?"
+		echo ""
+		echo -e "\e[33m    d) Borrar historial\e[0m"
+		echo -e "\e[33m    q) Salir\e[0m"
+		echo ""
+		read -p "[?] Opcion: " historial_query
+		echo ""
+		if [ "$historial_query" == "q" ]; then
+			continue
+		fi
+		if [ "$historial_query" == "d" ]; then
+			echo "" > /home/$linux_user/historial.txt
+		fi
+		;;
+	3)
+		clear
+		echo '⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⡀⡀⣀⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀'
+		echo '⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⣶⣾⣾⣿⣿⣿⣿⣿⣿⣿⣿⣆⣄⠀⠀⠀⠀⠀⠀⠀'
+		echo '⠀⠀⠀⠀⠀⠀⠀⢰⣿⢻⡿⡏⡟⣿⣱⣿⣧⣿⣯⣽⠻⣿⣿⣷⣦⠄⠀⠀⠀ https://github.com/Pirrandi/animu-cli'
+		echo '⠀⠀⠀⠀⠀⠀⠀⣸⣿⣷⣷⣿⢿⠿⡏⠻⡀⢻⠙⣿⣿⣧⣽⣿⣿⣿⣄⠀⠀⠀'
+		echo '⢽⡽⠒⠄⠀⠀⠘⡼⡟⠇⡇⢋⠈⢆⡽⠶⠾⢾⠆⠘⢿⣿⡻⣿⣿⣿⣿⣂⠀⠀  /$$$$$$$                      /$$'
+		echo '⡙⢷⣦⣰⠀⠀⠀⢱⡥⠵⠈⠲⢯⣵⣶⣶⡒⠎⠀⠀⢸⣿⣿⣿⣿⣿⣿⡇⠀⠀ | $$__  $$                    | $$'
+		echo '⢶⣱⠛⢛⡄⠀⠀⠀⢟⡟⠁⠀⠀⠀⠀⣰⣶⣖⡆⠀⠸⡟⣵⡿⣿⣿⣿⠁⠀⠀ | $$  \ $$ /$$   /$$  /$$$$$$ | $$'
+		echo '⢀⢳⢈⠠⣴⡀⠀⠀⠈⢿⠷⠂⠀⠀⠀⠹⣿⡟⠒⠀⠀⢐⡗⠚⣹⣿⠏⠀⠀⠀ | $$$$$$$ | $$  | $$ /$$__  $$| $$'
+		echo '⢸⠜⣷⠁⠄⠳⡀⠀⡇⣯⠭⣐⠠⠀⠀⠀⠹⡧⠀⠀⠀⡴⡤⢺⣿⠏⠀⠀⠀⠀ | $$__  $$| $$  | $$| $$$$$$$$|__/'
+		echo '⡎⢰⠀⢗⡝⠁⠱⡀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⡜⠀⡇⠈⡏⠀⠀⠀⠀⠀ | $$  \ $$| $$  | $$| $$_____/    '
+		echo '⢁⢸⠀⠀⢿⡍⠀⠑⣡⣤⣴⣤⣤⣤⣤⣴⣶⡾⠛⢡⠃⠠⡇⠀⡇⠀⠀⠀⠀⠀ | $$$$$$$/|  $$$$$$$|  $$$$$$$ /$$'
+		echo '⠘⣌⠀⠀⠈⢿⣏⠠⠵⡄⠉⢻⡿⢿⣿⠟⠉⠀⢀⡟⠀⠀⠇⠀⢡⠀⠀⠀⠀⠀ |_______/  \____  $$ \_______/|__/'
+		echo '⠀⠘⠀⠀⠀⠘⡵⡆⠄⠚⢄⠈⡟⠉⠀⠀⠀⠀⣨⠇⠀⠀⢸⣀⡨⠔⠂⠈⠁⠒            /$$  | $$              '
+		echo '⠀⠀⠀⠀⠀⠀⠸⣳⡄⣂⠭⢦⣽⡄⠀⠀⠀⠀⡟⢀⠤⢒⣉⣠⣴⣶⣿⣷⣴⡿           |  $$$$$$/              '
+		echo '⠀⠀⠀⠀⡠⣴⣶⣟⣥⣀⣉⣛⣿⣔⣀⣀⡠⠔⣩⣴⣾⣷⣿⣿⣿⡿⠟⢋⣁⣤            \______/               '
+		break
 		;;
 	esac
 done
