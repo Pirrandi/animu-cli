@@ -19,7 +19,7 @@ chmod +x animu-cli
 ```
 ### Requiere MPV como visualizador de video.
 
-## Si quieres mejorar la calidad de visualizacion complementalo con [Anime4k](https://github.com/bloc97/Anime4K) 
+### Si quieres mejorar la calidad de visualizacion complementalo con [Anime4k](https://github.com/bloc97/Anime4K) 
 
 ## Si quieres ejecutarlo desde cualquier lado del sistema, utiliza estos comandos.
 
