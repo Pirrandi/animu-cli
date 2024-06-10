@@ -7,7 +7,7 @@ buscar_anime() {
 	search_url="https://monoschinos2.com/buscar?q=$query"
 
 	# Realiza la búsqueda y filtra los resultados la clase "seristitles"
-	anime_titles=$(curl -s "$search_url" | grep -o '<h3 class="seristitles">[^<]*' | sed 's/<h3 class="seristitles">//')
+	anime_titles=$(curl -s "$search_url" | grep -o '<h3 class="fs-6 text-light mt-2 title_cap">[^<]*' | sed 's/<h3 class="fs-6 text-light mt-2 title_cap">//')
 	echo "$anime_titles"
 }
 
@@ -45,16 +45,15 @@ while true; do
 		echo -e "\e[35m    [!] Últimos capitulos vistos [!]\e[0m"
 		echo -e "\e[35m───────────────────────────────────────\e[0m"
 		echo -e "\e[35m\n\e[0m"
-		
-		if [ "$(cat $historial_file)" != "" ];then
 
-				echo "$(tail -n 5 $historial_file)"
+		if [ "$(cat $historial_file)" != "" ]; then
+
+			echo "$(tail -n 5 $historial_file)"
 
 		else
 			echo "Aun no hay ningun capitulo registrado."
 		fi
 
-		
 		echo -e "\e[35m\n\e[0m"
 		echo -e "\e[35m───────────────────────────────────────\e[0m"
 	}
@@ -455,9 +454,9 @@ while true; do
 						break
 					fi
 					respuesta=1
-						while [ "$respuesta" != 2 ]; do
+					while [ "$respuesta" != 2 ]; do
 						url="https://tioanime.com/ver/$anime_name_formatted-$episode_number"
-						
+
 						page_content=$(curl -s "$url")
 						# Buscar el enlace de YourUpload en la variable "videos"
 						yourupload_link=$(echo "$page_content" | grep -o 'YourUpload","[^"]*' | sed 's/.*"//' | sed 's/\\//g')
@@ -479,7 +478,7 @@ while true; do
 						clear
 						echo "Reproduciendo $anime_name_formatted - Episodio $episode_number"
 						mpv $mp4_link --referrer="https://yourupload.com"
-						
+
 						while true; do
 							clear
 							echo "¿Quieres continuar con el siguiente episodio?"
@@ -545,7 +544,7 @@ while true; do
 			continue
 		fi
 		if [ "$historial_query" == "d" ]; then
-			echo "" > /home/$linux_user/historial.txt
+			echo "" >/home/$linux_user/historial.txt
 		fi
 		;;
 	3)
