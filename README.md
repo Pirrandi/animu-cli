@@ -1,7 +1,7 @@
-
+<!--
 > [!IMPORTANT]
 > ${\textsf{\color{orange}Actualmente no esta funcionando dado que la web en la que se realiza el scrapping cambio el formato, se arreglara pronto.}}$
-
+-->
 
 <h1 align="center">Animu-CLI</h1>
 <h3 align="center">Visualizador de Anime mediante la terminal de Linux.</h3>
