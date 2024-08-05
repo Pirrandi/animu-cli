@@ -272,22 +272,53 @@ while true; do
 				echo "Conectando al servidor..."
 				data_player=$(ucurl "$url" | sed -nE "s@.*data-player=\"([^\"]*)\">mp4upload.*@\1@p" | head -1)
 				embed_link=$(printf "%s" "$data_player" | base64 -d)
-
 				video_link=$(ucurl "$embed_link" | sed -nE "s@.*src: \"([^\"]*)\".*@\1@p")
 
+				# Upload Extractor
 				if [ "$video_link" = "" ]; then
-					echo -e "\e[31mEl servidor fallo.\e[0m"
-					echo "Probando otro servidor..."
-					data_player=$(ucurl "$url" | sed -nE "s@.*data-player=\"([^\"]*)\">uqload*@\1@p" | head -1)
-					embed_link=$(printf "%s" "$data_player" | base64 -d)
-					embed_link=$(echo "$embed_link" | sed 's/\(.com\|.co\)/.io/')
+					echo -e "\e[31mEl servidor mp4upload fallo.\e[0m"
+					echo "Probando con el servidor upload.."
+					data_player=$(ucurl "$url" | sed -nE "s@.*data-player=\"([^\"]*)\">uqload*@\1@p" | head -1 2>/dev/null)
+					embed_link=$(printf "%s" "$data_player" | base64 -d 2>/dev/null)
+					embed_link=$(echo "$embed_link" | sed 's/\(.com\|.co\)/.io/' 2>/dev/null)
 					video_link=$(ucurl "$embed_link" | sed -n 's/.*sources: \["\([^"]*\.mp4\)".*/\1/p')
-
-					mpv "$video_link" --referrer="https://www.uqload.com/"
+                    
+                    if [ -n "$video_link" ]; then
+					mpv "$video_link" --referrer="https://www.uqload.com/" 2>/dev/null
+					fi
 				fi
+				
+				# Ok.ru extractor
+				if [ "$video_link" = "" ]; then
+				echo -e "\e[31mEl servidor upload fallo.\e[0m"
+				echo "Probando con el servidor Ok.RU ..."
+					
+				data_player=$(ucurl "$url" | sed -nE "s@.*data-player=\"([^\"]*)\">ok*@\1@p" | head -1 | awk -F '</button>' '{print $1}' 2>/dev/null)
+				embed_link=$(printf "%s" "$data_player" | base64 --decode 2>/dev/null)
+				
+				if [ -n "$embed_link" ]; then
+				mpv "$embed_link" --http-header-fields="Range: bytes=0-" 2>/dev/null
+fi
+				
+				# Voe extractor			
+				if [ "$embed_link" = "" ]; then
+				echo -e "\e[31mEl servidor Ok.ru fallo.\e[0m"
+				echo "Probando con el servidor Voe ..."
+				
+				data_player=$(ucurl "$url" | sed -nE "s@.*data-player=\"([^\"]*)\">voe*@\1@p" | head -1 | awk -F '</button>' '{print $1}' 2>/dev/null)
+				embed_link=$(printf "%s" "$data_player" | base64 --decode 2>/dev/null)
+				id=$(echo "$embed_link" | sed -e 's|.*/e/||')
+				video_link=$(ucurl "https://robertplacespace.com/$id" | grep -oP '(?<=prompt\("Node", ")[^"]*\.m3u8[^"]*')
+			
+				if [ -n "$video_link" ]; then
+				mpv "$video_link" --referrer="https://robertplacespace.com" "$video_link" 2>/dev/null
+				fi
+				
+				fi
+				
+fi
 
 				echo "Reproduciendo $anime_name_formatted - Episodio $episode_number"
-
 				mpv "$video_link" --referrer="https://www.mp4upload.com/"
 
 				if [ "$data_player" = "" ]; then
@@ -578,3 +609,4 @@ while true; do
 		;;
 	esac
 done
+
