@@ -1,13 +1,23 @@
 #!/bin/bash
 
+
+# curl cookies + user-agent
+ucurl () {
+  local url="$1"
+  curl -L -s -A "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/115.0" \
+  -b cookies.txt "$url"
+    
+}
+
 buscar_anime() {
 	query="$1"
 	# Reemplaza espacios con "+"
 	query=$(echo "$query" | tr ' ' '+')
 	search_url="https://monoschinos2.com/buscar?q=$query"
-
+    sleep 2
 	# Realiza la búsqueda y filtra los resultados la clase "seristitles"
-	anime_titles=$(curl -s "$search_url" | grep -o '<h3 class="fs-6 text-light mt-2 title_cap">[^<]*' | sed 's/<h3 class="fs-6 text-light mt-2 title_cap">//')
+	anime_titles=$(ucurl "$search_url" | grep -o '<h3 class="fs-6 text-light mt-2 title_cap">[^<]*' | sed 's/<h3 class="fs-6 text-light mt-2 title_cap">//')
+	
 	echo "$anime_titles"
 }
 
@@ -166,7 +176,9 @@ while true; do
 		API_URL="https://api.jikan.moe/v4/anime?q=$anime_name_formatted"
 
 		# Realiza la solicitud GET a la API y almacena la respuesta en una variable
-		response=$(curl -s "$API_URL")
+		response=$(ucurl "$API_URL")
+
+
 
 		# Utiliza jq para extraer el valor de "episodes" del JSON de respuesta
 		episodes=$(echo "$response" | jq -r '.data[0].episodes')
@@ -258,18 +270,18 @@ while true; do
 				agregar_al_historial "$selected_title" "$episode_number"
 				# Intenta reproducir el episodio desde mp4upload
 				echo "Conectando al servidor..."
-				data_player=$(curl -s "$url" | sed -nE "s@.*data-player=\"([^\"]*)\">mp4upload.*@\1@p" | head -1)
+				data_player=$(ucurl "$url" | sed -nE "s@.*data-player=\"([^\"]*)\">mp4upload.*@\1@p" | head -1)
 				embed_link=$(printf "%s" "$data_player" | base64 -d)
 
-				video_link=$(curl -s "$embed_link" | sed -nE "s@.*src: \"([^\"]*)\".*@\1@p")
+				video_link=$(ucurl "$embed_link" | sed -nE "s@.*src: \"([^\"]*)\".*@\1@p")
 
 				if [ "$video_link" = "" ]; then
 					echo -e "\e[31mEl servidor fallo.\e[0m"
 					echo "Probando otro servidor..."
-					data_player=$(curl -s "$url" | sed -nE "s@.*data-player=\"([^\"]*)\">uqload*@\1@p" | head -1)
+					data_player=$(ucurl "$url" | sed -nE "s@.*data-player=\"([^\"]*)\">uqload*@\1@p" | head -1)
 					embed_link=$(printf "%s" "$data_player" | base64 -d)
 					embed_link=$(echo "$embed_link" | sed 's/\(.com\|.co\)/.io/')
-					video_link=$(curl -s "$embed_link" | sed -n 's/.*sources: \["\([^"]*\.mp4\)".*/\1/p')
+					video_link=$(ucurl "$embed_link" | sed -n 's/.*sources: \["\([^"]*\.mp4\)".*/\1/p')
 
 					mpv "$video_link" --referrer="https://www.uqload.com/"
 				fi
@@ -356,7 +368,7 @@ while true; do
 						query="$1"
 						query=$(echo "$query" | tr ' ' '+')
 						search_url="https://tioanime.com/directorio?q=$query"
-						anime_titles=$(curl -s "$search_url" | grep -o '<h3 class="title">[^<]*' | sed 's/<h3 class="title">//')
+						anime_titles=$(ucurl "$search_url" | grep -o '<h3 class="title">[^<]*' | sed 's/<h3 class="title">//')
 						echo "$anime_titles"
 					}
 
@@ -405,14 +417,12 @@ while true; do
 					anime_name_formatted=$(echo "$selected_title" | tr ' ' '-')
 					# Busca el titulo en la API de Jikan
 					API_URL="https://api.jikan.moe/v4/anime?q=$anime_name_formatted"
-					response=$(curl -s "$API_URL")
+					response=$(ucurl "$API_URL")
+					
 					episodes=$(echo "$response" | jq -r '.data[0].episodes')
 					airing=$(echo "$response" | jq -r '.data[0].airing')
-
 					score=$(echo "$response" | jq -r '.data[0].score')
-
 					clasificacion=$(echo "$response" | jq -r '.data[0].rating')
-
 					duration=$(echo "$response" | jq -r '.data[0].duration')
 
 					# Verifica si se obtuvo el número de episodios correctamente
@@ -457,7 +467,7 @@ while true; do
 					while [ "$respuesta" != 2 ]; do
 						url="https://tioanime.com/ver/$anime_name_formatted-$episode_number"
 
-						page_content=$(curl -s "$url")
+						page_content=$(ucurl "$url")
 						# Buscar el enlace de YourUpload en la variable "videos"
 						yourupload_link=$(echo "$page_content" | grep -o 'YourUpload","[^"]*' | sed 's/.*"//' | sed 's/\\//g')
 						if [ -z "$yourupload_link" ]; then
@@ -467,7 +477,7 @@ while true; do
 						# Imprimir el enlace de YourUpload
 						#echo "Enlace de YourUpload: $yourupload_link"
 						# Acceder a la página de YourUpload
-						yourupload_page_content=$(curl -s "$yourupload_link")
+						yourupload_page_content=$(ucurl "$yourupload_link")
 						# Buscar la URL del video .mp4 en la página de YourUpload
 						mp4_link=$(echo "$yourupload_page_content" | grep -o 'content="https://[^"]*\.mp4"' | sed 's/content="//')
 						if [ -z "$mp4_link" ]; then
