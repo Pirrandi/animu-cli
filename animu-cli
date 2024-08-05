@@ -268,17 +268,24 @@ while true; do
 				url="https://monoschinos2.com/ver/$anime_name_formatted-episodio-$episode_number"
 				echo ""
 				agregar_al_historial "$selected_title" "$episode_number"
+				
+				#Crear Archivo Temporal que almacena el html de los servidores embebidos del anime 
+				
+				rm "$temp"  2>/dev/null
+				temp=$(mktemp)
+				ucurl "$url" > $temp
+				
 				# Intenta reproducir el episodio desde mp4upload
-				echo "Conectando al servidor..."
-				data_player=$(ucurl "$url" | sed -nE "s@.*data-player=\"([^\"]*)\">mp4upload.*@\1@p" | head -1)
+				echo -e "\033[1;33mConectando al servidor \033[1;32mMp4upload\033[1;33m.\033[0m"
+				data_player=$(sed -nE 's@.*data-player="([^"]*)">mp4upload.*@\1@p' "$temp" | head -1)
 				embed_link=$(printf "%s" "$data_player" | base64 -d)
 				video_link=$(ucurl "$embed_link" | sed -nE "s@.*src: \"([^\"]*)\".*@\1@p")
 
 				# Upload Extractor
-				if [ "$video_link" = "" ]; then
+				if [ "$video_link" = "" ]; then	
 					echo -e "\e[31mEl servidor mp4upload fallo.\e[0m"
-					echo "Probando con el servidor upload.."
-					data_player=$(ucurl "$url" | sed -nE "s@.*data-player=\"([^\"]*)\">uqload*@\1@p" | head -1 2>/dev/null)
+					echo -e "\033[1;33mProbando con el servidor \033[1;32mUpload\033[1;33m.\033[0m"
+					data_player=$(sed -nE "s@.*data-player=\"([^\"]*)\">uqload*@\1@p" "$temp" | head -1 2>/dev/null)
 					embed_link=$(printf "%s" "$data_player" | base64 -d 2>/dev/null)
 					embed_link=$(echo "$embed_link" | sed 's/\(.com\|.co\)/.io/' 2>/dev/null)
 					video_link=$(ucurl "$embed_link" | sed -n 's/.*sources: \["\([^"]*\.mp4\)".*/\1/p')
@@ -291,9 +298,8 @@ while true; do
 				# Ok.ru extractor
 				if [ "$video_link" = "" ]; then
 				echo -e "\e[31mEl servidor upload fallo.\e[0m"
-				echo "Probando con el servidor Ok.RU ..."
-					
-				data_player=$(ucurl "$url" | sed -nE "s@.*data-player=\"([^\"]*)\">ok*@\1@p" | head -1 | awk -F '</button>' '{print $1}' 2>/dev/null)
+				echo -e "\033[1;33mProbando con el servidor \033[1;32mOkru\033[1;33m.\033[0m"	
+				data_player=$(sed -nE "s@.*data-player=\"([^\"]*)\">ok*@\1@p" "$temp" | head -1 | awk -F '</button>' '{print $1}' 2>/dev/null)
 				embed_link=$(printf "%s" "$data_player" | base64 --decode 2>/dev/null)
 				
 				if [ -n "$embed_link" ]; then
@@ -303,9 +309,8 @@ fi
 				# Voe extractor			
 				if [ "$embed_link" = "" ]; then
 				echo -e "\e[31mEl servidor Ok.ru fallo.\e[0m"
-				echo "Probando con el servidor Voe ..."
-				
-				data_player=$(ucurl "$url" | sed -nE "s@.*data-player=\"([^\"]*)\">voe*@\1@p" | head -1 | awk -F '</button>' '{print $1}' 2>/dev/null)
+				echo -e "\033[1;33mProbando con el servidor \033[1;32mVoe\033[1;33m.\033[0m"	
+		    	data_player=$(sed -nE "s@.*data-player=\"([^\"]*)\">voe*@\1@p" "$temp" | head -1 | awk -F '</button>' '{print $1}' 2>/dev/null)
 				embed_link=$(printf "%s" "$data_player" | base64 --decode 2>/dev/null)
 				id=$(echo "$embed_link" | sed -e 's|.*/e/||')
 				video_link=$(ucurl "https://robertplacespace.com/$id" | grep -oP '(?<=prompt\("Node", ")[^"]*\.m3u8[^"]*')
@@ -316,6 +321,26 @@ fi
 				
 				fi
 				
+				# Streamtape extractor
+				if [ "$video_link" = "" ]; then
+				echo -e "\e[31mEl servidor voe fallo.\e[0m"
+				echo -e "\033[1;33mProbando con el servidor \033[1;32mStreamtape\033[1;33m.\033[0m"
+				data_player=$(sed -nE "s@.*data-player=\"([^\"]*)\">streamtape*@\1@p" "$temp" | head -1 | awk -F '</button>' '{print $1}' 2>/dev/null)
+				embed_link=$(printf "%s" "$data_player" | base64 --decode 2>/dev/null)
+				id=$(echo "$embed_link" | sed -e 's|.*/e/||')
+				data_player=$(ucurl "https://strtape.cloud/e/$id")
+				video_link=$(echo "$data_player" | grep "document.getElementById('captchalink')" | sed -n 's/.*id=\([^ ]*\).*/\1/p' | sed "s/'.*//" )
+
+				if [ -z "$video_link" ]; then
+				video_link=$(echo "$data_player" | grep "document.getElementById('botlink')" | sed -n 's/.*id=\([^ ]*\).*/\1/p' | sed "s/'.*//")
+				fi
+
+				if [ -n "$video_link" ]; then
+				mpv --referrer="https://strtape.cloup" "https://strtape.cloud/get_video?id=${video_link}&stream=1" 2>/dev/null
+				fi
+
+fi
+
 fi
 
 				echo "Reproduciendo $anime_name_formatted - Episodio $episode_number"
@@ -609,4 +634,3 @@ fi
 		;;
 	esac
 done
-
