@@ -13,10 +13,10 @@ buscar_anime() {
 	query="$1"
 	# Reemplaza espacios con "+"
 	query=$(echo "$query" | tr ' ' '+')
-	search_url="https://monoschinos2.com/buscar?q=$query"
+	search_url="https://monoschinos2.net/animes?buscar=$query"
     sleep 2
 	# Realiza la búsqueda y filtra los resultados la clase "seristitles"
-	anime_titles=$(ucurl "$search_url" | grep -o '<h3 class="fs-6 text-light mt-2 title_cap">[^<]*' | sed 's/<h3 class="fs-6 text-light mt-2 title_cap">//')
+	anime_titles=$(ucurl "$search_url" | grep -o '<h3 class="fs-6 text-light mt-3 title_cap txtbreak">[^<]*' | sed 's/<h3 class="fs-6 text-light mt-3 title_cap txtbreak">//')
 	
 	echo "$anime_titles"
 }
@@ -265,14 +265,17 @@ while true; do
 			while [ "$respuesta" != 2 ]; do
 				clear
 				echo "Has seleccionado el episodio $episode_number."
-				url="https://monoschinos2.com/ver/$anime_name_formatted-episodio-$episode_number"
+				url="https://monoschinos2.net/ver/$anime_name_formatted-episodio-$episode_number"
 				echo ""
 				agregar_al_historial "$selected_title" "$episode_number"
 				# Intenta reproducir el episodio desde mp4upload
 				echo "Conectando al servidor..."
-				data_player=$(ucurl "$url" | sed -nE "s@.*data-player=\"([^\"]*)\">mp4upload.*@\1@p" | head -1)
-				embed_link=$(printf "%s" "$data_player" | base64 -d)
-				video_link=$(ucurl "$embed_link" | sed -nE "s@.*src: \"([^\"]*)\".*@\1@p")
+
+				# Esto solo funciona en monoschinos2.com:
+				#data_player=$(ucurl "$url" | sed -nE "s@.*data-player=\"([^\"]*)\">mp4upload.*@\1@p" | head -1)
+				data_player=$(ucurl "$url" | grep -o '<a class="btn btn-warning" target="_blank" href="https://www.mp4upload.com[^<]*' | sed 's/.*href="\([^"]*\)".*/\1/' | sed 's|https://www.mp4upload.com/|https://www.mp4upload.com/embed-|')
+				#embed_link=$(printf "%s" "$data_player" | base64 -d)
+				video_link=$(ucurl "$data_player" | sed -nE "s@.*src: \"([^\"]*)\".*@\1@p")
 
 				# Upload Extractor
 				if [ "$video_link" = "" ]; then
